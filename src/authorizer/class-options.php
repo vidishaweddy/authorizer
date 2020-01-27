@@ -25,10 +25,11 @@ class Options extends Static_Instance {
 	 * @param  string $print_mode    'print overlay' will output overlay that hides this option on the settings page.
 	 * @return mixed                 Option value, or null on failure.
 	 */
-	public function get( $option, $admin_mode = Helper::SINGLE_CONTEXT, $override_mode = 'no override', $print_mode = 'no overlay' ) {
+	public function get( $option, $admin_mode = Helper::SINGLE_CONTEXT, $override_mode = 'no override', $print_mode = 'no overlay', $fetch_new = 'false' ) {
 		// Special case for user lists (they are saved seperately to prevent concurrency issues).
 		if ( in_array( $option, array( 'access_users_pending', 'access_users_approved', 'access_users_blocked' ), true ) ) {
-			$list = Helper::NETWORK_CONTEXT === $admin_mode ? array() : get_option( 'auth_settings_' . $option );
+			$auth_list = $fetch_new == 'true' ? get_option("auth_settings_$option") : get_option( 'auth_settings_' . $option );
+			$list = Helper::NETWORK_CONTEXT === $admin_mode ? array() : $auth_list;
 			if ( is_multisite() && Helper::NETWORK_CONTEXT === $admin_mode ) {
 				$list = get_blog_option( get_network()->blog_id, 'auth_multisite_settings_' . $option, array() );
 			}

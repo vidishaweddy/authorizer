@@ -154,7 +154,7 @@ class Public_Access extends \Authorizer\Static_Instance {
 		// Get plugin option.
 		$options              = Options::get_instance();
 		$option               = 'access_public_pages';
-		$auth_settings_option = $options->get( $option );
+		$auth_settings_option = $options->get( $option, Helper::SINGLE_CONTEXT, 'no override', 'no overlay', 'true' );
 		$auth_settings_option = is_array( $auth_settings_option ) ? $auth_settings_option : array();
 
 		$post_types = array_merge( array( 'page', 'post' ), get_post_types( array( '_builtin' => false ), 'names' ) );

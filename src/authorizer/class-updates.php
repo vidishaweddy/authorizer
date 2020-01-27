@@ -18,6 +18,26 @@ use Authorizer\Options;
 class Updates extends Static_Instance {
 
 	/**
+	 * Updates public pages with new published post
+	 *
+	 * Action: draft_to_publish, pending_to_publish
+	 */
+	public function set_public_page( $new_status, $old_status, $post ) {
+		$options              = Options::get_instance();
+		$option               = 'access_public_pages';
+		$auth_settings_option = $options->get( $option, Helper::SINGLE_CONTEXT, 'no override', 'no overlay', 'false' );
+		$auth_settings_option = is_array( $auth_settings_option ) ? $auth_settings_option : array();
+
+		if ( $new_status == 'publish' ) {
+	    array_push($auth_settings_option, esc_attr( $post->ID ));
+			$auth_settings = $options->get_all( Helper::SINGLE_CONTEXT, 'no override' );
+			$auth_settings[$option] = $auth_settings_option;
+			update_option( "auth_settings_$option", $auth_settings_option );
+			update_option( "auth_settings", $auth_settings );
+		}
+	}
+
+	/**
 	 * Plugin Update Routines.
 	 *
 	 * Action: plugins_loaded

@@ -59,6 +59,10 @@ class WP_Plugin_Authorizer extends Static_Instance {
 		// Enable localization. Translation files stored in /languages.
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 
+		// Set object as public after publish
+		add_action( 'transition_post_status', array( Updates::get_instance(), 'set_public_page' ), 10, 3 );
+		add_action( 'wp_transition_post_status', array( Updates::get_instance(), 'set_public_page' ), 10, 3 );
+
 		// Perform plugin updates if newer version installed.
 		add_action( 'plugins_loaded', array( Updates::get_instance(), 'auth_update_check' ) );
 
